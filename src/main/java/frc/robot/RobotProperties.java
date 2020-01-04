@@ -43,6 +43,7 @@ public class RobotProperties {
         rightTalon1 = new WPI_TalonSRX(1);
         rightTalon2 = new WPI_TalonSRX(2);
 
+        // combine multiple talons on each side into a single controller (necessary for the robotDrive)
         leftTalons = new SpeedControllerGroup(leftTalon1, leftTalon2);
         rightTalons = new SpeedControllerGroup(rightTalon1, rightTalon2);
 
