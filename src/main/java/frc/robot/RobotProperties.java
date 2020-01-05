@@ -17,9 +17,11 @@ public class RobotProperties {
 
     private WPI_TalonSRX leftTalon1;
     private WPI_TalonSRX leftTalon2;
+    private WPI_TalonSRX leftTalon3;
 
     private WPI_TalonSRX rightTalon1;
     private WPI_TalonSRX rightTalon2;
+    private WPI_TalonSRX rightTalon3;
 
     private SpeedControllerGroup leftTalons;
     private SpeedControllerGroup rightTalons;
@@ -39,13 +41,15 @@ public class RobotProperties {
 
         leftTalon1 = new WPI_TalonSRX(1);
         leftTalon2 = new WPI_TalonSRX(2);
+        leftTalon3 = new WPI_TalonSRX(3);
 
-        rightTalon1 = new WPI_TalonSRX(1);
-        rightTalon2 = new WPI_TalonSRX(2);
+        rightTalon1 = new WPI_TalonSRX(4);
+        rightTalon2 = new WPI_TalonSRX(5);
+        rightTalon3 = new WPI_TalonSRX(6);
 
         // combine multiple talons on each side into a single controller (necessary for the robotDrive)
-        leftTalons = new SpeedControllerGroup(leftTalon1, leftTalon2);
-        rightTalons = new SpeedControllerGroup(rightTalon1, rightTalon2);
+        leftTalons = new SpeedControllerGroup(leftTalon1, leftTalon2, leftTalon3);
+        rightTalons = new SpeedControllerGroup(rightTalon1, rightTalon2, rightTalon3);
 
         robotDrive = new DifferentialDrive(leftTalons, rightTalons);
     }
