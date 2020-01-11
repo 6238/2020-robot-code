@@ -7,7 +7,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -24,6 +29,22 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  /* private denotes that the class variables are not available in other classes.
+  the talons are objects */
+  private WPI_TalonSRX leftTalon1;
+  private WPI_TalonSRX leftTalon2;
+  private WPI_TalonSRX leftTalon3;
+  private WPI_TalonSRX rightTalon1;
+  private WPI_TalonSRX rightTalon2;
+  private WPI_TalonSRX rightTalon3;
+
+  private SpeedControllerGroup leftMotors;
+  private SpeedControllerGroup rightMotors;
+
+  private DifferentialDrive robotDrive;
+
+  private Joystick leftJoyStick;
+  private Joystick rightJoyStick;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -33,6 +54,24 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+/* code below instantiates the talons (which number)
+*/
+    leftTalon1 = new WPI_TalonSRX(1);
+    leftTalon2 = new WPI_TalonSRX(2);
+    leftTalon3 = new WPI_TalonSRX(3);
+
+    rightTalon1 = new WPI_TalonSRX(4);
+    rightTalon2 = new WPI_TalonSRX(5);
+    rightTalon3 = new WPI_TalonSRX(6);
+/* the code below instantiates the speed controller group so that we can control all
+the talons as a group (set all to speed 5, for ex) */
+    leftMotors = new SpeedControllerGroup(leftTalon1, leftTalon2, leftTalon3);
+    rightMotors = new SpeedControllerGroup(rightTalon1, rightTalon2, rightTalon3);
+
+    robotDrive = new DifferentialDrive(leftMotors, rightMotors);
+
+    leftJoyStick = new Joystick(0);
+    rightJoyStick = new Joystick(1);
   }
 
   /**
@@ -86,6 +125,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    robotDrive.tankDrive(leftJoyStick.getY(), rightJoyStick.getY());
+    
   }
 
   /**
