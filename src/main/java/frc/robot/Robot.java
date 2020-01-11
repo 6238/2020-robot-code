@@ -7,11 +7,17 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Compressor;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,6 +31,17 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private WPI_TalonSRX leftTalon1;
+  private WPI_TalonSRX leftTalon2;
+  private WPI_TalonSRX leftTalon3;
+  private WPI_TalonSRX rightTalon1;
+  private WPI_TalonSRX rightTalon2;
+  private WPI_TalonSRX rightTalon3;
+  private SpeedControllerGroup leftMotors;
+  private SpeedControllerGroup rightMotors;
+  private Joystick leftJoystick;
+  private Joystick rightJoystick;
+  private DifferentialDrive robotDrive;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -36,7 +53,22 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    WPI_TalonSRX rightTalon1 = new WPI_TalonSRX(1);
+    leftTalon1 = new WPI_TalonSRX(1);
+    leftTalon2 = new WPI_TalonSRX(2);
+    leftTalon3 = new WPI_TalonSRX(3);
+    rightTalon1 = new WPI_TalonSRX(4);
+    rightTalon2 = new WPI_TalonSRX(5);
+    rightTalon3 = new WPI_TalonSRX(6);
+
+    leftMotors = new SpeedControllerGroup(leftTalon1, leftTalon2, leftTalon3);
+    rightMotors = new SpeedControllerGroup(rightTalon1, rightTalon2, rightTalon3);
+
+    robotDrive = new DifferentialDrive(leftMotors, rightMotors);
+
+    leftJoystick = new Joystick(0);
+    rightJoystick = new Joystick(1);
+
+
   }
 
   /**
@@ -90,6 +122,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    robotDrive.tankDrive(leftJoystick.getY(), rightJoystick.getY());
   }
 
   /**
