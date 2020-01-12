@@ -38,6 +38,8 @@ public class Robot extends TimedRobot {
 
   private Joystick leftJoystick;
   private Joystick rightJoystick;
+  private double insanityFactor = 0.5;
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -66,14 +68,9 @@ public class Robot extends TimedRobot {
     leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
 
-    
-    
-
-   
-    
-
-
-
+    SmartDashboard.putNumber("insanityFactor", insanityFactor);
+    //^on the dashboard, it will create  abox of sort with title insanityFactor and display
+    //insanityFactor.
 
 
   }
@@ -130,8 +127,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //here's where we write our drive train code.
+    insanityFactor = SmartDashboard.getNumber("insanityFactor", insanityFactor);
+    //^gets the value from insnaityFactor. if it doesn't, it'll set it to current insanityFactor
 
-    robotDrive.tankDrive(leftJoystick.getY(), rightJoystick.getY());
+    robotDrive.tankDrive(insanityFactor*leftJoystick.getY(), insanityFactor*rightJoystick.getY());
+
 
 
 
@@ -145,5 +145,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+
   }
 }
