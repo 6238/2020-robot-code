@@ -45,6 +45,8 @@ public class Robot extends TimedRobot {
 
   private Joystick leftJoyStick;
   private Joystick rightJoyStick;
+
+  private Double insanityFactor = 0.5; /* set at half speed */
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -72,7 +74,10 @@ the talons as a group (set all to speed 5, for ex) */
 
     leftJoyStick = new Joystick(0);
     rightJoyStick = new Joystick(1);
-  }
+
+    SmartDashboard.putNumber("insanityFactor", insanityFactor);
+    //on the dashboard, it will create a box of sort with title insanityfactor and display //insanity factor*/
+
 
   /**
    * This function is called every robot packet, no matter the mode. Use
@@ -125,8 +130,10 @@ the talons as a group (set all to speed 5, for ex) */
    */
   @Override
   public void teleopPeriodic() {
-    robotDrive.tankDrive(leftJoyStick.getY(), rightJoyStick.getY());
-    
+    insanityFactor = SmartDashboard.getNumber("insanityFactor", insanityFactor):
+//gets the value from insanityfactor. if it doesn't it'll set it to current insanity factor
+    robotDrive.tankDrive(insanityFactor*leftJoyStick.getY(), insanityFactor*rightJoyStick.getY());
+
   }
 
   /**
