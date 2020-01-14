@@ -28,6 +28,13 @@ public class RobotProperties {
 
     private DifferentialDrive robotDrive;
 
+    private WPI_TalonSRX diskMotor;
+
+    private WPI_TalonSRX shooter1;
+    private WPI_TalonSRX shooter2;
+
+    private WPI_TalonSRX intake;
+
     public RobotProperties() {
         if (instanceCount > 0) {
             throw new RuntimeException("Only one RobotProperties instance is allowed per robot!");
@@ -52,6 +59,13 @@ public class RobotProperties {
         rightTalons = new SpeedControllerGroup(rightTalon1, rightTalon2, rightTalon3);
 
         robotDrive = new DifferentialDrive(leftTalons, rightTalons);
+
+        diskMotor = new WPI_TalonSRX(7);
+
+        shooter1 = new WPI_TalonSRX(8);
+        shooter2 = new WPI_TalonSRX(9);
+
+        intake = new WPI_TalonSRX(10);
     }
 
     public JoystickController getL_Stick() {
