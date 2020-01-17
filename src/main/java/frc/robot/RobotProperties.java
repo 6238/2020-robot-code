@@ -33,6 +33,8 @@ public class RobotProperties {
     private WPI_TalonSRX shooter1;
     private WPI_TalonSRX shooter2;
 
+    private SpeedControllerGroup shooter;
+
     private WPI_TalonSRX intake;
 
     public RobotProperties() {
@@ -44,6 +46,7 @@ public class RobotProperties {
 
         l_Stick = new JoystickController(0);
         r_Stick = new JoystickController(1);
+
         pdp = new PowerDistributionPanel();
 
         leftTalon1 = new WPI_TalonSRX(1);
@@ -65,6 +68,8 @@ public class RobotProperties {
         shooter1 = new WPI_TalonSRX(8);
         shooter2 = new WPI_TalonSRX(9);
 
+        shooter = new SpeedControllerGroup(shooter1, shooter2);
+
         intake = new WPI_TalonSRX(10);
     }
 
@@ -78,6 +83,18 @@ public class RobotProperties {
 
     public DifferentialDrive getRobotDrive() {
         return robotDrive;
+    }
+
+    public SpeedControllerGroup getShooter() {
+        return shooter;
+    }
+
+    public WPI_TalonSRX getDiskMotor() {
+        return diskMotor;
+    }
+
+    public WPI_TalonSRX getIntake() {
+        return intake;
     }
 
     public void pushData() {
@@ -95,6 +112,12 @@ public class RobotProperties {
         SmartDashboard.putNumber("r_Slider", r_Stick.getSlider());
 
         SmartDashboard.putData("robotDrive", getRobotDrive());
+
+        SmartDashboard.putData("shooter", getShooter());
+
+        SmartDashboard.putData("diskMotor", getDiskMotor());
+
+        SmartDashboard.putData("intake", getIntake());
 
         SmartDashboard.putData("pdp", pdp);
     }

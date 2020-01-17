@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     for (RobotController controller : controllers) {
-      controller.performAction(properties);
+      controller.performAction();
     }
   }
 

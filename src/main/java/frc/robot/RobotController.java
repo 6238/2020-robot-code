@@ -15,5 +15,5 @@ public interface RobotController {
      *         in a more complex manner.
      */
     
-    boolean performAction(RobotProperties properties);
+    boolean performAction();
 }

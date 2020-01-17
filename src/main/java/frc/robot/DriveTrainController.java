@@ -13,13 +13,13 @@ public class DriveTrainController implements RobotController {
     private JoystickController r_Stick;
 
     // speed multiplier/reducer
-    double insanityFactor = 0.5;
+    private double insanityFactor = 0.5;
 
-    // inverted drive for hatch panel
-    boolean reverseDrive = false;
+    // inverted drive
+    private boolean reverseDrive = false;
 
     // joystick drive or no?
-    boolean joyDrive = true;
+    private boolean joyDrive = true;
 
     // left joystick values
     // private double l_JoyX;
@@ -43,7 +43,7 @@ public class DriveTrainController implements RobotController {
     }
 
     @Override
-    public boolean performAction(RobotProperties properties) {
+    public boolean performAction() {
 
         insanityFactor = SmartDashboard.getNumber("insanityFactor", 0.5);
         reverseDrive = SmartDashboard.getBoolean("reverseDrive", false);
