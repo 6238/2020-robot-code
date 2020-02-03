@@ -22,20 +22,22 @@ public class DriveTrainController implements RobotController {
     private boolean joyDrive = true;
 
     // left joystick values
-    // private double l_JoyX;
     private double l_JoyY;
-    // private double l_JoyZ;
 
     // right joystick values
-    // private double r_JoyX;
     private double r_JoyY;
-    // private double r_JoyZ;
 
-    DriveTrainController(RobotProperties properties) {
+    private double sliderValue;
+
+    public DriveTrainController(RobotProperties properties) {
         robotDrive = properties.getRobotDrive();
 
         l_Stick = properties.getL_Stick();
         r_Stick = properties.getR_Stick();
+
+        sliderValue = r_Stick.getSlider();
+        sliderValue += 1;
+        sliderValue /= 2;
 
         SmartDashboard.putNumber("insanityFactor", insanityFactor);
         SmartDashboard.putBoolean("reverseDrive", reverseDrive);
@@ -44,18 +46,24 @@ public class DriveTrainController implements RobotController {
 
     @Override
     public boolean performAction() {
-
-        insanityFactor = SmartDashboard.getNumber("insanityFactor", 0.5);
         reverseDrive = SmartDashboard.getBoolean("reverseDrive", false);
         joyDrive = SmartDashboard.getBoolean("joyDrive", true);
 
-        // l_JoyX = l_Stick.getX();
+        double newSliderValue = r_Stick.getSlider();
+        newSliderValue += 1;
+        newSliderValue /= 2;
+
         l_JoyY = l_Stick.getY();
-        // l_JoyZ = l_Stick.getZ();
         
-        // r_JoyX = r_Stick.getX();
         r_JoyY = r_Stick.getY();
-        // r_JoyZ = r_Stick.getZ();
+
+        if (SmartDashboard.getNumber("insanityFactor", 0.5) != insanityFactor) {
+            insanityFactor = SmartDashboard.getNumber("insanityFactor", insanityFactor);
+        } else if (newSliderValue != sliderValue) {
+            insanityFactor = newSliderValue;
+            sliderValue = newSliderValue;
+        }
+        SmartDashboard.putNumber("insanityFactor", insanityFactor);
         
         if (joyDrive) {
             if (reverseDrive) {

@@ -69,11 +69,11 @@ public class JoystickController {
 
     // Numeral Buttons
 
-    public boolean getOne() {
+    public boolean getTrigger() {
         return getButton(1);
     }
 
-    public boolean getTwo() {
+    public boolean getThumb() {
         return getButton(2);
     }
 

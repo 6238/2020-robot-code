@@ -12,11 +12,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class ControlPanelController implements RobotController {
+    private JoystickController r_Stick;
 
     private WPI_TalonSRX diskMotor;
 
     private boolean positionControl = false;
     private boolean rotationControl = false;
+
+    private boolean positionComplete = false;
+    private boolean rotationComplete = false;
 
     private boolean blue = false;
     private boolean green = false;
@@ -57,9 +61,9 @@ public class ControlPanelController implements RobotController {
     private int positionInt;
 
     public ControlPanelController(RobotProperties properties) {
-        diskMotor = properties.getDiskMotor();
+        r_Stick = properties.getR_Stick();
 
-        // bring over teleopInit stuff, make position control and rotation control dashboard buttons & joystick activated
+        diskMotor = properties.getDiskMotor();
 
         colorMatcher.addColorMatch(kBlueTarget);
         colorMatcher.addColorMatch(kGreenTarget);
@@ -72,15 +76,30 @@ public class ControlPanelController implements RobotController {
 
         SmartDashboard.putBoolean("positionControl", positionControl);
         SmartDashboard.putBoolean("rotationControl", rotationControl);
+
+        SmartDashboard.putBoolean("positionComplete", positionComplete);
+        SmartDashboard.putBoolean("rotationComplete", rotationComplete);
     }
 
     public boolean performAction() {
         positionControl = SmartDashboard.getBoolean("positionControl", positionControl);
         rotationControl = SmartDashboard.getBoolean("rotationControl", rotationControl);
 
+        positionComplete = SmartDashboard.getBoolean("positionComplete", positionComplete);
+        rotationComplete = SmartDashboard.getBoolean("rotationComplete", rotationComplete);
+
+        positionSpeed = SmartDashboard.getNumber("positionSpeed", positionSpeed);
+        rotationSpeed = SmartDashboard.getNumber("rotationSpeed", rotationSpeed);
+
         countThreshold = (int) SmartDashboard.getNumber("countThreshold", countThreshold);
         confidenceThreshold = SmartDashboard.getNumber("confidenceThreshold", confidenceThreshold);
         maxCount = (int) SmartDashboard.getNumber("maxCount", maxCount);
+
+        if (r_Stick.getThree() && !rotationComplete) {
+            rotationControl = true;
+        } else if (r_Stick.getFour() && rotationComplete && !positionComplete) {
+            positionControl = true;
+        }
 
         if (positionControl && rotationControl) {
             rotationControl = false;
@@ -112,17 +131,22 @@ public class ControlPanelController implements RobotController {
                 SmartDashboard.putNumber("tempCount", tempCount);
     
                 if (colorCount < maxCount * 2) {
-                    diskMotor.set(SmartDashboard.getNumber("insanityFactor", rotationSpeed));
+                    diskMotor.set(rotationSpeed);
                 } else {
                     diskMotor.set(0);
-                    positionControl = true;
+
+                    rotationControl = false;
+                    rcSetup = false;
+                    rotationComplete = true;
+
+                    SmartDashboard.putBoolean("rotationComplete", rotationComplete);
                 }
     
                 if (colorMatched && match.confidence > confidenceThreshold) {
                     tempCount++;
                 } else {
                     if (tempCount > countThreshold) {
-                    colorCount++;
+                        colorCount++;
                     }
                     tempCount = 0;
                 }
@@ -229,12 +253,17 @@ public class ControlPanelController implements RobotController {
                 }
 
                 if (colorInt < positionInt) {
-                    diskMotor.set(-1 * SmartDashboard.getNumber("positionSpeed", positionSpeed));
+                    diskMotor.set(-1 * positionSpeed);
                 } else if (colorInt > positionInt) {
-                    diskMotor.set(SmartDashboard.getNumber("positionSpeed", positionSpeed));
+                    diskMotor.set(positionSpeed);
                 } else {
                     diskMotor.set(0);
+
                     positionControl = false;
+                    pcSetup = false;
+                    positionComplete = true;
+
+                    SmartDashboard.putBoolean("positionComplete", positionComplete);
                 }
             }
         }

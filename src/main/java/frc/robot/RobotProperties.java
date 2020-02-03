@@ -28,14 +28,17 @@ public class RobotProperties {
 
     private DifferentialDrive robotDrive;
 
-    private WPI_TalonSRX diskMotor;
-
     private WPI_TalonSRX shooter1;
     private WPI_TalonSRX shooter2;
 
     private SpeedControllerGroup shooter;
 
-    private WPI_TalonSRX intake;
+    private WPI_TalonSRX diskMotor;
+
+    private WPI_TalonSRX intake1;
+    private WPI_TalonSRX intake2;
+
+    private SpeedControllerGroup intake;
 
     public RobotProperties() {
         if (instanceCount > 0) {
@@ -63,14 +66,17 @@ public class RobotProperties {
 
         robotDrive = new DifferentialDrive(leftTalons, rightTalons);
 
-        diskMotor = new WPI_TalonSRX(7);
-
-        shooter1 = new WPI_TalonSRX(8);
-        shooter2 = new WPI_TalonSRX(9);
+        shooter1 = new WPI_TalonSRX(7);
+        shooter2 = new WPI_TalonSRX(8);
 
         shooter = new SpeedControllerGroup(shooter1, shooter2);
+        
+        diskMotor = new WPI_TalonSRX(9);
+        
+        intake1 = new WPI_TalonSRX(10);
+        intake2 = new WPI_TalonSRX(11);
 
-        intake = new WPI_TalonSRX(10);
+        intake = new SpeedControllerGroup(intake1, intake2);
     }
 
     public JoystickController getL_Stick() {
@@ -85,6 +91,14 @@ public class RobotProperties {
         return robotDrive;
     }
 
+    public WPI_TalonSRX getShooter1() {
+        return shooter1;
+    }
+
+    public WPI_TalonSRX getShooter2() {
+        return shooter2;
+    }
+
     public SpeedControllerGroup getShooter() {
         return shooter;
     }
@@ -93,7 +107,15 @@ public class RobotProperties {
         return diskMotor;
     }
 
-    public WPI_TalonSRX getIntake() {
+    public WPI_TalonSRX getIntake1() {
+        return intake1;
+    }
+
+    public WPI_TalonSRX getIntake2() {
+        return intake2;
+    }
+
+    public SpeedControllerGroup getIntake() {
         return intake;
     }
 

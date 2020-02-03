@@ -45,6 +45,10 @@ public class Robot extends TimedRobot {
     properties = new RobotProperties();
 
     controllers.add(new DriveTrainController(properties));
+    controllers.add(new ControlPanelController(properties));
+    controllers.add(new ShooterController(properties));
+    // controllers.add(new ShooterControllerDual(properties));
+    controllers.add(new IntakeController(properties));
   }
 
   /**
@@ -108,5 +112,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    
   }
 }
