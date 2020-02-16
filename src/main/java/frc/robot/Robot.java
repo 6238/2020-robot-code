@@ -7,9 +7,16 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,9 +34,12 @@ public class Robot extends TimedRobot {
   private WPI_TalonSRX leftTalon1;
   private WPI_TalonSRX leftTalon2;
   private WPI_TalonSRX leftTalon3;
+
+
   private WPI_TalonSRX rightTalon1;
   private WPI_TalonSRX rightTalon2;
   private WPI_TalonSRX rightTalon3;
+
 
   private SpeedControllerGroup leftMotors;
   private SpeedControllerGroup rightMotors;
@@ -38,8 +48,10 @@ public class Robot extends TimedRobot {
 
   private Joystick leftJoystick;
   private Joystick rightJoystick;
-  private double insanityFactor = 0.5;
 
+  private double insanityFactor;
+  private boolean isArcadeDrive = true;
+  
 
   /**
    * This function is run when the robot is first started up and should be
@@ -67,10 +79,17 @@ public class Robot extends TimedRobot {
 
     leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
+    insanityFactor = 1;
+
+    
+    
+
+   
 
     SmartDashboard.putNumber("insanityFactor", insanityFactor);
     //^on the dashboard, it will create  abox of sort with title insanityFactor and display
     //insanityFactor.
+    SmartDashboard.putBoolean("isArcadeDrive", isArcadeDrive);
 
 
   }
@@ -85,6 +104,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
   }
 
   /**
@@ -127,20 +147,24 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+ 
     //here's where we write our drive train code.
     insanityFactor = SmartDashboard.getNumber("insanityFactor", insanityFactor);
     //^gets the value from insnaityFactor. if it doesn't, it'll set it to current insanityFactor
 
-    robotDrive.tankDrive(insanityFactor*leftJoystick.getY(), insanityFactor*rightJoystick.getY());
+    if(isArcadeDrive)
+    {
+      robotDrive.arcadeDrive(insanityFactor*leftJoystick.getY(), insanityFactor*leftJoystick.getZ());
+    }
+    
+    if(isArcadeDrive == false)
+    {
+      robotDrive.tankDrive(insanityFactor*leftJoystick.getY(), insanityFactor*rightJoystick.getY());
+    }
 
+   }
 
-
-
-
-
-
-  }
-
+  
   /**
    * This function is called periodically during test mode.
    */
