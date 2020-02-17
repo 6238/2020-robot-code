@@ -7,7 +7,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -127,18 +132,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    //here's where we write our drive train code.
-    insanityFactor = SmartDashboard.getNumber("insanityFactor", insanityFactor);
-    //^gets the value from insnaityFactor. if it doesn't, it'll set it to current insanityFactor
-
-    robotDrive.tankDrive(insanityFactor*leftJoystick.getY(), insanityFactor*rightJoystick.getY());
-
-
-
-
-
-
-
+    // here's where we write our drive train code.
+    // if driver changes insanityFactor, use that. otherwise if programmer changes insanityFactor, use that
+    if (insanityFactor != 0.5 * (1 + rightJoystick.getThrottle())) {
+      insanityFactor = 0.5 * (1 + rightJoystick.getThrottle());
+    } else if (insanityFactor != SmartDashboard.getNumber("insanityFactor", insanityFactor)) {
+      insanityFactor = SmartDashboard.getNumber("insanityFactor", insanityFactor);
+    }
+    
+    robotDrive.tankDrive(-1 * insanityFactor * leftJoystick.getY(), -1 * insanityFactor * rightJoystick.getY());
+    
+    SmartDashboard.putNumber("insanityFactor", insanityFactor);
+    SmartDashboard.putNumber("left", leftJoystick.getY());
+    SmartDashboard.putNumber("right", rightJoystick.getY());
   }
 
   /**
